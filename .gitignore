@@ -1,0 +1,9 @@
+# глобальные файлы
+node_modules/
+dist/
+.env
+.DS_Store
+.idea/
+*.log
+docker-compose.yml
+!docker-compose.example.yml

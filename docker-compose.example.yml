@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    restart: always
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_postgres_password
+      POSTGRES_DB: short_link
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./short_link_server
+      dockerfile: Dockerfile
+    env_file: ./short_link_server/.env
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    restart: always
+    environment:
+      DATABASE_HOST: my_postgres
+
+  frontend:
+    build:
+      context: ./short_link_client
+      dockerfile: Dockerfile
+    ports:
+      - "4173:4173"
+    restart: always
+    depends_on:
+      - backend
+
+volumes:
+  pg_data:
